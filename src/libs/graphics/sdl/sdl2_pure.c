@@ -289,7 +289,7 @@ TFB_Pure_InitGraphics (int driver, int flags, const char* renderer,
 	log_add (log_Info, "Initializing Screen.");
 
 	ScreenWidth = (320 << resFactor);
-	ScreenHeight = (240 << resFactor);
+	ScreenHeight = (200 << resFactor);
 	rendererBackend = renderer;
 
 	if (TFB_Pure_ConfigureVideo (driver, flags, width, height, 0, resFactor))
