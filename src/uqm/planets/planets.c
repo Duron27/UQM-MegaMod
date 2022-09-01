@@ -55,6 +55,7 @@ CONTEXT PlanetContext;
 BOOLEAN actuallyInOrbit = FALSE;
 		// For determining if the player is in actual scanning orbit
 BOOLEAN useDosSpheres = FALSE;
+BOOLEAN use3DOSpheres = FALSE;
 
 void
 DestroyOrbitStruct (PLANET_ORBIT* Orbit, SIZE height)
@@ -132,6 +133,9 @@ DestroyOrbitStruct (PLANET_ORBIT* Orbit, SIZE height)
 
 	DestroyDrawable (ReleaseDrawable (Orbit->TopoMask));
 	Orbit->TopoMask = 0;
+
+	DestroyDrawable (ReleaseDrawable (Orbit->Shade));
+	Orbit->Shade = 0;
 
 	DestroyColorMap (ReleaseColorMap (Orbit->sphereMap));
 	Orbit->sphereMap = 0;
@@ -525,6 +529,7 @@ FreePlanet (void)
 	DestroyScanContext ();
 	DestroyPCLanderContext ();
 	useDosSpheres = FALSE;
+	use3DOSpheres = FALSE;
 	actuallyInOrbit = FALSE;
 }
 

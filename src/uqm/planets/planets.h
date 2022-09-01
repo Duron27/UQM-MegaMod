@@ -162,6 +162,8 @@ struct planet_orbit
 	FRAME TopoMask;
 	COLORMAP sphereMap;
 	COUNT scanType;
+
+	FRAME Shade;
 };
 
 #if defined(__cplusplus)
@@ -314,6 +316,7 @@ extern MUSIC_REF SpaceMusic;
 extern CONTEXT PlanetContext;
 extern BOOLEAN actuallyInOrbit;
 extern BOOLEAN useDosSpheres;
+extern BOOLEAN use3DOSpheres;
 
 // Random context used for all solar system, planets and surfaces generation
 extern RandomContext *SysGenRNG;
@@ -366,6 +369,7 @@ extern void DrawPlanetSphere (int x, int y);
 extern void DrawDefaultPlanetSphere (void);
 extern void RerenderPlanetSphere (void);
 extern void RenderDOSPlanetSphere (PLANET_ORBIT* Orbit, FRAME MaskFrame, int offset);
+extern void Render3DOPlanetSphere (PLANET_ORBIT* Orbit, FRAME MaskFrame, int offset);
 extern void RenderPlanetSphere (PLANET_ORBIT *Orbit, FRAME Frame,
 		int offset, BOOLEAN shielded, BOOLEAN doThrob, COUNT width,
 		COUNT height, COUNT radius);

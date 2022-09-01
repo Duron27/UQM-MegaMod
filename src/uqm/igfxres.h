@@ -351,3 +351,4 @@
 #define VISITED_STARS_ANIM "graphics.visitedstars"
 #define WRECK_MASK_PMAP_ANIM "graphics.urquanwreck"
 #define DOS_PLANET_MASK_ANIM "graphics.dossphere"
+#define PLANET_MASK_SHADE "graphics.3do.shade"
