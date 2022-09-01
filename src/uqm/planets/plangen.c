@@ -478,7 +478,9 @@ RenderTopography (FRAME DstFrame, SBYTE *pTopoData, int w, int h,
 				d = *pSrc;
 				if (AlgoType == GAS_GIANT_ALGO)
 				{	// make elevation value non-negative
-					// d += base;
+
+					if (use3DOSpheres)
+						d += base;
 					d &= 255;
 				}
 				else
