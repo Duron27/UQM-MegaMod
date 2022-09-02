@@ -72,8 +72,8 @@ DrawCurrentPlanetSphere (void)
 		}
 		else if (use3DOSpheres)
 		{
-			Orbit->SphereFrame = SetAbsFrameIndex(Orbit->SphereFrame,
-				rotFrameIndex);
+			Orbit->SphereFrame = SetAbsFrameIndex (Orbit->SphereFrame,
+					rotFrameIndex);
 
 			Render3DOPlanetSphere (
 					Orbit, Orbit->SphereFrame, rotPointIndex);
@@ -81,11 +81,12 @@ DrawCurrentPlanetSphere (void)
 		else
 		{
 			Orbit->SphereFrame = SetAbsFrameIndex (Orbit->SphereFrame,
-				rotFrameIndex);
+					rotFrameIndex);
 			RenderPlanetSphere (Orbit, Orbit->SphereFrame, rotPointIndex,
-				pSolarSysState->pOrbitalDesc->data_index & PLANET_SHIELDED,
-				throbShield, rotwidth, rotheight,
-				(rotheight >> 1) - IF_HD (2));
+					pSolarSysState->pOrbitalDesc->data_index
+						& PLANET_SHIELDED,
+					throbShield, rotwidth, rotheight,
+					(rotheight >> 1) - IF_HD (2));
 		}
 	}
 	BatchGraphics ();

@@ -479,7 +479,7 @@ RenderTopography (FRAME DstFrame, SBYTE *pTopoData, int w, int h,
 				if (AlgoType == GAS_GIANT_ALGO)
 				{	// make elevation value non-negative
 
-					if (use3DOSpheres)
+					if (optScanSphere == 1)
 						d += base;
 					d &= 255;
 				}
@@ -1320,12 +1320,13 @@ Render3DOPlanetSphere (PLANET_ORBIT* Orbit, FRAME MaskFrame, int offset)
 
 			if (PlanetInfo->AxialTilt != 0)
 				rotFrame = CaptureDrawable (
-					RotateFrame (dupeframe, -(PlanetInfo->AxialTilt)));// other side in 3DO
+						RotateFrame (dupeframe, -(PlanetInfo->AxialTilt)));
+						// other side in 3DO
 			else
 				rotFrame = CaptureDrawable (
-					CloneFrame (dupeframe));
+						CloneFrame (dupeframe));
 
-			GetFrameRect (rotFrame, &r);		
+			GetFrameRect (rotFrame, &r);
 
 			// Draw everything in offscreen context
 			oldContext = SetContext (OffScreenContext);
@@ -1333,9 +1334,9 @@ Render3DOPlanetSphere (PLANET_ORBIT* Orbit, FRAME MaskFrame, int offset)
 			ClearDrawable ();
 			SetContextClipRect (NULL);
 
-			oldMode = SetContextDrawMode(DRAW_REPLACE_MODE);
+			oldMode = SetContextDrawMode (DRAW_REPLACE_MODE);
 
-			SetFrameHot (rotFrame, MAKE_HOT_SPOT(0, 0));
+			SetFrameHot (rotFrame, MAKE_HOT_SPOT (0, 0));
 
 			s.origin.x = -(r.extent.width / 2);
 			s.origin.y = -(r.extent.height / 2);
@@ -1361,10 +1362,12 @@ Render3DOPlanetSphere (PLANET_ORBIT* Orbit, FRAME MaskFrame, int offset)
 					pmask->g = clip_channel (pmask->g - pshade->g);
 					pmask->b = clip_channel (pmask->b - pshade->b);
 
-					if (optTintPlanSphere == OPT_PC && Orbit->scanType < NUM_SCAN_TYPES)
+					if (optTintPlanSphere == OPT_PC
+							&& Orbit->scanType < NUM_SCAN_TYPES)
 					{
 						if (optScanStyle == OPT_3DO)
-							*pmask = apply_alpha_pixel (*pmask, Orbit->scanType);
+							*pmask = apply_alpha_pixel (
+									*pmask, Orbit->scanType);
 						else if (optScanStyle == OPT_PC)
 							TransformColor (pmask, Orbit->scanType);
 					}
@@ -1378,7 +1381,7 @@ Render3DOPlanetSphere (PLANET_ORBIT* Orbit, FRAME MaskFrame, int offset)
 
 			DestroyDrawable (ReleaseDrawable (dupeframe));
 			DestroyDrawable (ReleaseDrawable (rotFrame));
-		}			
+		}
 	}
 }
 
@@ -1869,32 +1872,34 @@ planet_orbit_init (COUNT width, COUNT height, BOOLEAN forOrbit)
 		if (useDosSpheres)
 		{
 			Orbit->sphereMap =
-				CaptureColorMap(LoadColorMap(DOS_SPHERE_COLOR_TAB));
-			SetColorMap(GetColorMapAddress(Orbit->sphereMap));
+					CaptureColorMap (LoadColorMap (DOS_SPHERE_COLOR_TAB));
+			SetColorMap (GetColorMapAddress (Orbit->sphereMap));
 
 			Orbit->SphereFrame =
-				CaptureDrawable (LoadGraphic (DOS_PLANET_MASK_ANIM));
+					CaptureDrawable (LoadGraphic (DOS_PLANET_MASK_ANIM));
 
 			Orbit->ScratchArray = NULL;
 		}
 		else if (use3DOSpheres)
 		{
 			Orbit->SphereFrame = CaptureDrawable (CreateDrawable (
-				WANT_PIXMAP | WANT_ALPHA, diameter, diameter, 2));
+					WANT_PIXMAP | WANT_ALPHA, diameter, diameter, 2));
 
-			SetFrameHot (Orbit->SphereFrame, MAKE_HOT_SPOT (diameter / 2, diameter / 2));
+			SetFrameHot (Orbit->SphereFrame,
+					MAKE_HOT_SPOT (diameter / 2, diameter / 2));
 
 			Orbit->SphereFrame = IncFrameIndex (Orbit->SphereFrame);
 
-			SetFrameHot(Orbit->SphereFrame, MAKE_HOT_SPOT (diameter / 2, diameter / 2));
+			SetFrameHot(Orbit->SphereFrame,
+					MAKE_HOT_SPOT (diameter / 2, diameter / 2));
 
 			Orbit->SphereFrame = DecFrameIndex (Orbit->SphereFrame);
 
 			Orbit->Shade =
-				CaptureDrawable (LoadGraphic (PLANET_MASK_SHADE));
+					CaptureDrawable (LoadGraphic (PLANET_MASK_SHADE));
 
 			Orbit->ScratchArray = HMalloc (sizeof (Orbit->ScratchArray[0])
-				* (shielddiam) * (shielddiam));
+					* (shielddiam) * (shielddiam));
 		}
 
 		Orbit->TopoMask = CaptureDrawable (CreateDrawable (
@@ -2526,8 +2531,8 @@ GeneratePlanetSurface (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame,
 		radius = RADIUS;
 		ForIP = FALSE;
 
-		useDosSpheres = isPC (optScanSphere);
-		use3DOSpheres = FALSE; //entry point not finished
+		useDosSpheres = optScanSphere == 0;
+		use3DOSpheres = optScanSphere == 1; //entry point not finished
 	}
 	else
 	{
@@ -2628,7 +2633,8 @@ GeneratePlanetSurface (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame,
 			SetPlanetColors (GetColorMapAddress (Orbit->sphereMap));
 		}
 		else if (use3DOSpheres)
-			Orbit->TopoMask = CaptureDrawable (CloneFrame (pSolarSysState->TopoFrame));
+			Orbit->TopoMask = CaptureDrawable (
+					CloneFrame (pSolarSysState->TopoFrame));
 
 		if (Orbit->TopoMask != NULL)
 			ExpandLevelMasks (Orbit);

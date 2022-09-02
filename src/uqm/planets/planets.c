@@ -53,6 +53,7 @@ enum PlanetMenuItems
 CONTEXT PlanetContext;
 		// Context for rotating planet view and lander surface view
 BOOLEAN actuallyInOrbit = FALSE;
+
 		// For determining if the player is in actual scanning orbit
 BOOLEAN useDosSpheres = FALSE;
 BOOLEAN use3DOSpheres = FALSE;
