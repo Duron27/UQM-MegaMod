@@ -35,6 +35,7 @@
 #include "libs/inplib.h"
 #include "libs/tasklib.h"
 #include "libs/scriptlib.h"
+#include "libs/callback/alarm.h"
 #include "uqm/controls.h"
 #include "uqm/battle.h"
 		// For BATTLE_FRAME_RATE
@@ -67,6 +68,7 @@ BOOLEAN restartGame;
 
 #if defined(ANDROID) || defined(__ANDROID__)
 #	include <SDL_android.h>
+#	include "SDL_main.h"
 static void AndroidAppPutToBackgroundCallback(void) {
 	SDL_ANDROID_PauseAudioPlayback();
 	GameActive = FALSE;
@@ -310,8 +312,11 @@ static const char *choiceOptString (const struct int_option *option);
 static const char *boolOptString (const struct bool_option *option);
 static const char *boolNotOptString (const struct bool_option *option);
 
-int
-main (int argc, char *argv[])
+#ifdef ANDROID
+int SDL_main(int argc, char** argv)
+#else
+int main(int argc, char** argv)
+#endif
 {
 	struct options_struct options = {
 		/* .logFile = */            NULL,

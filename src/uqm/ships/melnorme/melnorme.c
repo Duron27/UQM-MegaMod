@@ -21,6 +21,7 @@
 #include "resinst.h"
 #include "../../setup.h"
 #include "../../setupmenu.h"
+#include "../../battle.h"
 #include "uqm/globdata.h"
 #include "libs/mathlib.h"
 #include "uqm/tactrans.h" // Kruzen: for sounds on April Fools

@@ -20,6 +20,7 @@
  */
 
 #include "options.h"
+#include "../cmake/config_unix.h"
 
 #include "port.h"
 #include "libs/graphics/gfx_common.h"
