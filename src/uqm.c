@@ -67,17 +67,7 @@ BOOLEAN restartGame;
 #endif
 
 #if defined(ANDROID) || defined(__ANDROID__)
-#	include <SDL_android.h>
 #	include "SDL_main.h"
-static void AndroidAppPutToBackgroundCallback(void) {
-	SDL_ANDROID_PauseAudioPlayback();
-	GameActive = FALSE;
-}
-
-static void SDLCALL AndroidAppRestoredCallback(void) {
-	SDL_ANDROID_ResumeAudioPlayback();
-	GameActive = TRUE;
-}
 #endif
 
 struct bool_option
@@ -440,6 +430,18 @@ int main(int argc, char** argv)
 	int gfxDriver;
 	int gfxFlags;
 	int i;
+
+#ifdef ANDROID
+	// Always enable logging on Android to specific path
+	options.logFile = "/storage/emulated/0/alpha3/uqm/uqm_log.txt";
+	options.opengl.value = true;
+	options.opengl.set = true;
+	options.contentDir = "/storage/emulated/0/alpha3/uqm/content";
+	options.configDir = "/storage/emulated/0/alpha3/uqm";
+	// Set audio driver to OpenAL
+	//options.soundDriver.value = audio_DRIVER_OPENAL;
+	//options.soundDriver.set = true;
+#endif
 
 	// NOTE: we cannot use the logging facility yet because we may have to
 	//   log to a file, and we'll only get the log file name after parsing

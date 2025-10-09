@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.14)
 
 project(uqm)
 
-set(CMAKE_C_STANDARD 99)
-
 include(CheckIncludeFile)
 include(CheckLibraryExists)
 
@@ -28,7 +26,6 @@ find_package(SDL2 REQUIRED)
 find_package(OpenAL REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(PNG REQUIRED)
-find_package(OpenGL REQUIRED)
 find_package(Threads REQUIRED)
 
 include_directories(src)
@@ -37,12 +34,11 @@ include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${PNG_INCLUDE_DIRS})
 include_directories(cmake)
 
-add_definitions(-DDEBUG -DGFXMODULE_SDL -DUSE_INTERNAL_MIKMOD -DUSE_INTERNAL_LUA -DTHREADLIB_PTHREAD)
+add_definitions(-DDEBUG -DGFXMODULE_SDL -DUSE_INTERNAL_MIKMOD -DUSE_INTERNAL_LUA -DTHREADLIB_PTHREAD -DHAVE_OPENAL)
 
 file(GLOB gameFiles src/*.c src/uqm/*.c src/uqm/supermelee/*.c src/libs/uio/stdio/*.c)
 file(GLOB_RECURSE sourceFiles src/uqm/ships/*.c src/uqm/planets/*.c src/uqm/lua/*.c src/uqm/comm/*.c)
 file(GLOB_RECURSE libFiles src/libs/luauqm/*.c src/libs/video/*.c src/libs/mikmod/*.c src/libs/time/*.c src/libs/task/*.c src/libs/strings/*.c src/libs/sound/*.c src/libs/resource/*.c src/libs/memory/*.c src/libs/math/*.c src/libs/list/*.c src/libs/input/*.c src/libs/heap/*.c src/libs/graphics/*.c src/libs/file/*.c src/libs/decomp/*.c src/libs/callback/*.c)
-list(APPEND libFiles src/libs/math/random.c)
 
 foreach(f lapi.c lbaselib.c lcode.c lctype.c ldebug.c ldump.c lgc.c liolib.c lmathlib.c loadlib.c lopcodes.c lparser.c lstring.c ltable.c ltm.c lvm.c lauxlib.c lbitlib.c lcorolib.c ldblib.c ldo.c lfunc.c linit.c llex.c lmem.c lobject.c loslib.c lstate.c lstrlib.c ltablib.c lundump.c lzio.c)
     list(APPEND libFiles "src/libs/lua/${f}")
@@ -81,7 +77,7 @@ endif()
 set_target_properties(uqm PROPERTIES LINK_FLAGS_DEBUG "${linkFlagsDebug} ${linkFlags}")
 set_target_properties(uqm PROPERTIES LINK_FLAGS_RELEASE "${linkFlags}")
 
-target_link_libraries(uqm PRIVATE SDL2::SDL2 ${LIBOGG} ${LIBVORBIS} ${LIBVORBISFILE} OpenAL::OpenAL ZLIB::ZLIB PNG::PNG m Threads::Threads)
+target_link_libraries(uqm PRIVATE SDL2::SDL2 ${LIBOGG} ${LIBVORBIS} ${LIBVORBISFILE} OpenAL::OpenAL ZLIB::ZLIB PNG::PNG m Threads::Threads log)
 
 if (NOT MSVC AND NOT ANDROID)
     target_link_libraries(uqm PRIVATE m)

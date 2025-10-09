@@ -445,12 +445,6 @@ Battle (BattleFrameCallback *callback)
 {
 	SIZE num_ships;
 
-#if defined(ANDROID) || defined(__ANDROID__)
-	TFB_SetOnScreenKeyboard_Melee ();
-	if (PlayerControl[1] & HUMAN_CONTROL)
-		TFB_SetOnScreenKeyboard_TwoPlayersMelee ();
-#endif
-
 #if !(DEMO_MODE || CREATE_JOURNAL)
 	if (LOBYTE (GLOBAL (CurrentActivity)) != SUPER_MELEE) {
 		// In Supermelee, the RNG is already initialised.
@@ -563,10 +557,6 @@ AbortBattle:
 
 	UninitShips ();
 	FreeBattleSong ();
-
-#if defined(ANDROID) || defined(__ANDROID__)
-	TFB_SetOnScreenKeyboard_Menu ();
-#endif
 	
 	return (BOOLEAN) (num_ships < 0);
 }

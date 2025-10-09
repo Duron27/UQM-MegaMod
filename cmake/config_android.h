@@ -7,23 +7,26 @@
  * manually if you want anything else than the defaults.
  */
 
-#ifndef _CONFIG_UNIX_H
-#define _CONFIG_UNIX_H
+#ifndef CONFIG_ANDROID_H_
+#define CONFIG_ANDROID_H_
 
 /* Directory where the UQM game data is located */
-#define CONTENTDIR "/usr/local/games/share/uqm/content"
+#define CONTENTDIR "/storage/emulated/0/alpha3/uqm/content/"
 
 /* Directory where game data will be stored */
-#define USERDIR "~/.uqm/"
+#define USERDIR "/storage/emulated/0/alpha3/uqm/"
 
 /* Directory where config files will be stored */
 #define CONFIGDIR USERDIR
 
 /* Directory where supermelee teams will be stored */
-#define MELEEDIR "${UQM_CONFIG_DIR}/teams/"
+#define MELEEDIR "/storage/emulated/0/alpha3/uqm/teams/"
 
 /* Directory where save games will be stored */
-#define SAVEDIR "${UQM_CONFIG_DIR}/save/"
+#define SAVEDIR "/storage/emulated/0/alpha3/uqm/save/"
+
+/* Directory where screenshots will be stored */
+#define SCRSHOTDIR "/storage/emulated/0/alpha3/uqm/screenshots/"
 
 /* Defined if words are stored with the most significant byte first */
 #undef WORDS_BIGENDIAN
@@ -59,5 +62,5 @@
 /* Defined if your system has _Bool of its own */
 #define HAVE__BOOL
 
-#endif  /* _CONFIG_UNIX_H */
+#endif  /* CONFIG_ANDROID_H_ */
 

@@ -2869,13 +2869,8 @@ ExploreSolarSys (void)
 	InitSolarSys ();
 	SetMenuSounds (MENU_SOUND_NONE, MENU_SOUND_NONE);
 	SolarSysState.InputFunc = DoIpFlight;
-#if defined(ANDROID) || defined(__ANDROID__)
-	TFB_SetOnScreenKeyboard_Melee();
-	DoInput(&SolarSysState, FALSE);
-	TFB_SetOnScreenKeyboard_Menu();
-#else
+
 	DoInput (&SolarSysState, FALSE);
-#endif
 
 	UninitSolarSys ();
 	pSolarSysState = 0;
@@ -3191,25 +3186,17 @@ DoIpFlight (SOLARSYS_STATE *pSS)
 
 	if (pSS->InOrbit)
 	{	// CheckShipLocation() or InitSolarSys() sent us to orbital
-#if defined(ANDROID) || defined(__ANDROID__)
-		TFB_SetOnScreenKeyboard_Menu ();
+
 		EnterPlanetOrbit ();
-		TFB_SetOnScreenKeyboard_Melee ();
-#else
-		EnterPlanetOrbit ();
-#endif
+
 		SetMenuSounds (MENU_SOUND_NONE, MENU_SOUND_NONE);
 		pSS->InOrbit = FALSE;
 	}
 	else if (!NewGameInit && (cancel || LastActivity == CHECK_LOAD))
 	{
-#if defined(ANDROID) || defined(__ANDROID__)
-		TFB_SetOnScreenKeyboard_Menu ();
+
 		SolarSysMenu ();
-		TFB_SetOnScreenKeyboard_Melee ();
-#else
-		SolarSysMenu ();
-#endif
+
 		SetMenuSounds (MENU_SOUND_NONE, MENU_SOUND_NONE);
 	}
 	else if (!(GLOBAL(CurrentActivity) & CHECK_ABORT))
