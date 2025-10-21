@@ -35,6 +35,7 @@
 #include "libs/inplib.h"
 #include "libs/tasklib.h"
 #include "libs/scriptlib.h"
+#include "libs/callback/alarm.h"
 #include "uqm/controls.h"
 #include "uqm/battle.h"
 		// For BATTLE_FRAME_RATE
@@ -63,6 +64,10 @@ BOOLEAN restartGame;
 #if defined (GFXMODULE_SDL)
 #	include SDL_INCLUDE(SDL.h)
 			// Including this is actually necessary on OSX.
+#endif
+
+#if defined(ANDROID) || defined(__ANDROID__)
+#	include "SDL_main.h"
 #endif
 
 struct bool_option
@@ -298,8 +303,11 @@ static const char *choiceOptString (const struct int_option *option);
 static const char *boolOptString (const struct bool_option *option);
 static const char *boolNotOptString (const struct bool_option *option);
 
-int
-main (int argc, char *argv[])
+#ifdef ANDROID
+int SDL_main(int argc, char** argv)
+#else
+int main(int argc, char** argv)
+#endif
 {
 	struct options_struct options = {
 		/* .logFile = */            NULL,
@@ -411,6 +419,13 @@ main (int argc, char *argv[])
 	int gfxDriver;
 	int gfxFlags;
 	int i;
+
+#ifdef ANDROID
+	// Always enable logging on Android to specific path
+	options.logFile = "/storage/emulated/0/alpha3/uqm/uqm_log.txt";
+	options.contentDir = "/storage/emulated/0/alpha3/uqm/content";
+	options.configDir = "/storage/emulated/0/alpha3/uqm";
+#endif
 
 	// NOTE: we cannot use the logging facility yet because we may have to
 	//   log to a file, and we'll only get the log file name after parsing
@@ -1068,11 +1083,6 @@ getUserConfigOptions (struct options_struct *options)
 	}
 	getBoolConfigValue (&options->volasMusic, "mm.volasMusic");
 	getBoolConfigValue (&options->wholeFuel, "mm.wholeFuel");
-
-#ifdef DIRECTIONAL_JOY
-	getBoolConfigValue (&options->directionalJoystick,
-			"mm.directionalJoystick"); // For Android
-#endif
 
 	getBoolConfigValueXlat (&options->landerHold, "mm.landerHold",
 		OPT_3DO, OPT_PC);
@@ -2523,9 +2533,6 @@ usage (FILE *out, const struct options_struct *defaults)
 	log_add (log_User, "  --wholefuel : Enables the display of the whole "
 			"fuel value in the ship status (default: %s)",
 			boolOptString (&defaults->wholeFuel));
-	log_add (log_User, "  --dirjoystick : Enables the use of directional"
-			"joystick controls for Android (default: %s)",
-			boolOptString (&defaults->directionalJoystick));
 	log_add (log_User, "  --landerhold : Switch between PC/3DO max lander "
 			"hold, pc=64, 3do=50 (default: %s)",
 			choiceOptString (&defaults->landerHold));
