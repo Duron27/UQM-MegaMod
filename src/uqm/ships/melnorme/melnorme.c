@@ -25,6 +25,7 @@
 #include "uqm/globdata.h"
 #include "libs/mathlib.h"
 #include "uqm/tactrans.h" // Kruzen: for sounds on April Fools
+#include "uqm/battle.h"
 
 // Core characteristics
 #define MAX_CREW 20

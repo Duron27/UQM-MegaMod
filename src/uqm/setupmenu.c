@@ -303,6 +303,7 @@ static WIDGET *cheat_widgets[] = {
 	NULL };
 	
 static WIDGET *keyconfig_widgets[] = {
+
 #if SDL_MAJOR_VERSION == 2 // Refined joypad controls not supported in SDL1
 	(WIDGET *)(&choices[CHOICE_INPDEVICE ]), // Control Display
 #endif
@@ -847,7 +848,7 @@ rename_template (WIDGET_TEXTENTRY *self)
 }
 
 static void
-change_seedtype (WIDGET_CHOICE *self)
+change_seedtype (WIDGET_CHOICE *self, int oldval)
 {
 	if (self->selected == OPTVAL_PRIME)
 	{
@@ -1886,6 +1887,7 @@ init_widgets (void)
 
 	/* Choice 20 has a special onChange handler, too. */
 	choices[CHOICE_KBLAYOUT  ].onChange = change_template;
+	choices[CHOICE_GAMESEED  ].onChange = change_seedtype;
 
 	// Check addon availability for HD mode, DOS/3DO mode, and music remixes
 	choices[CHOICE_GRAPHICS  ].onChange = check_availability;
@@ -2039,7 +2041,8 @@ init_widgets (void)
 	}
 
 	if (SplitString (GetStringAddress (SetAbsStringTableIndex (
-			SetupTab, index++)), '\n', MAX_BUFF, buffer, bank) != LABEL_COUNT)
+			SetupTab, index++)), '\n', MAX_BUFF, buffer, bank)
+			!= LABEL_COUNT)
 	{
 		/* TODO: Ignore extras instead of dying. */
 		log_add (log_Fatal, "PANIC: Incorrect number of Label Options");
@@ -2149,7 +2152,6 @@ init_widgets (void)
 	}
 
 	textentries[TEXT_LOUTNAME].onChange = rename_template;
-	choices[CHOICE_GAMESEED].onChange = change_seedtype;
 	textentries[TEXT_GAMESEED].onChange = change_seed;
 	textentries[TEXT_CUSTMRES].onChange = change_res;
 
@@ -2695,11 +2697,7 @@ SetGlobalOptions (GLOBALOPTS *opts)
 #if SDL_MAJOR_VERSION == 1 // Refined joypad controls aren't supported on SDL1
 		opts->controllerType = 0;
 #endif
-	if (PutIntOpt (&optControllerType, (int*)(&opts->controllerType), "mm.controllerType", FALSE))
-	{
-		TFB_UninitInput ();
-		TFB_InitInput (TFB_INPUTDRIVER_SDL, 0);
-	}
+	PutIntOpt (&optControllerType, (int *)(&opts->controllerType), "mm.controllerType", FALSE);
 #ifdef DIRECTIONAL_JOY
 	PutBoolOpt (&optDirectionalJoystick, &opts->directionalJoystick, "mm.directionalJoystick", FALSE);
 #endif
@@ -2767,14 +2765,8 @@ SetGlobalOptions (GLOBALOPTS *opts)
 	PutBoolOpt (&optShipDirectionIP, &opts->shipDirectionIP, "mm.shipDirectionIP", FALSE);
 
 	// Controls
+	PlayerControls[0] = opts->player1;
 	PlayerControls[1] = opts->player2;
-
-	if (optControllerType == 2)
-		PlayerControls[0] = CONTROL_TEMPLATE_JOY_3;
-	else if (optControllerType == 1)
-		PlayerControls[0] = CONTROL_TEMPLATE_JOY_2;
-	else
-		PlayerControls[0] = opts->player1;
 
 	res_PutInteger ("config.player1control", opts->player1);
 	res_PutInteger ("config.player2control", opts->player2);
